@@ -49,7 +49,7 @@ class Song(Base):
 	name = Column(String(200), nullable=False)
 	author = Column(String(200), nullable=False)
 
-	playlist_id = Column(Integer, ForeignKey('playlists.id'))
+	playlist_ids = Column(Integer, ForeignKey('playlists.id'))
 
 	@property
 	def serialize(self):

@@ -1,30 +1,27 @@
-from flask import Flask, json, redirect, render_template, request
+from flask import Flask, json, redirect, render_template, request, session
 from models import User, Song, Playlist
 from database import db_session, init_db
 from sqlalchemy.exc import IntegrityError
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from wtforms import Form, PasswordField, TextField, validators
 
 app = Flask(__name__)
+app.secret_key =  'total secret'
 
 @app.route('/')
 def index():
-	return 'Hello'
+	return render_template('login.html')
 
-@app.route('/search')
-def search():
-	res = User.query.filter(User.username == 'Sashenka').all()
-	return '<p>%s</p>' % res
-
-@app.route('/add')
-def add():
-	u = User(username='Alesha', password='1234intellect')
-	db_session.add(u)
-	try:
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+	username = request.form['username']
+	password = request.form['password']
+	s = db_session.query(User).filter(User.username == username).first()
+	if not s:
+		u = User(username=username, password=password)
+		db_session.add(u)
 		db_session.commit()
-	except IntegrityError:
-		return 'duplicate'
-	return json.dumps(u.serialize)
+		session['user'] = {'username':username, 'logged_in': True}
+		return 'Success'
+	return 'Accoun already exists'
 
 @app.teardown_appcontext
 def shutdown_session(param):
