@@ -6,47 +6,47 @@ from database import Base
 
 class User(Base):
 
-	"""
-	Class that contains information about Users.
+    """
+    Class that contains information about Users.
 
-	Attributes:
-		id (:obj:`int`, unique): id of User.
-		username (:obj:`str`, unique, not nullable): username of User.
-		password (:obj:`str`, not nullable): password of User.
-	
+    Attributes:
+    	id (:obj:`int`, unique): id of User.
+    	username (:obj:`str`, unique, not nullable): username of User.
+    	password (:obj:`str`, not nullable): password of User.
+
     """
 
-	__tablename__ = 'users'
-	id = Column(Integer, primary_key=True, autoincrement=True)
-	username = Column(String(200), unique=True, nullable=False)
-	password = Column(String(200), nullable=False)
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(200), unique=True, nullable=False)
+    password = Column(String(200), nullable=False)
 
-	playlists = relationship('Playlist', backref='users')
+    playlists = relationship('Playlist', backref='users')
 
-	def __init__(self, username, password):
+    def __init__(self, username, password):
         """
         Args:
             sername (:obj:`str`, unique, not nullable): username of User.
             password (:obj:`str`, not nullable): password of User.
         """
-		self.username = username
-		self.password = generate_password_hash(password)
+        self.username = username
+        self.password = generate_password_hash(password)
 
-	@property
-	def serialize(self):
+    @property
+    def serialize(self):
         """
         Return diction of class properties.
         """
-		return {
-			'username': self.username,
-			'playlists': self.playlists
+        return {
+            'username': self.username,
+            'playlists': self.playlists
         }
 
-	def __repr__(self):
+    def __repr__(self):
         """
         Return str of class User.
         """
-		return 'User name %s' % self.username
+        return 'User name %s' % self.username
 
 
 class Playlist(Base):
@@ -69,7 +69,7 @@ class Playlist(Base):
 
     @property
     def serialize(self):
-         """
+        """
         Return diction of class properties.
         """
         return {
@@ -78,7 +78,7 @@ class Playlist(Base):
         }
 
     def __repr__(self):
-         """
+        """
         Return str of class Playlist.
         """
         return '<Playlist name: %s>' % self.name

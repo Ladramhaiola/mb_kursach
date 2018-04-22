@@ -1,6 +1,6 @@
 from flask import Flask, json, redirect, render_template, request, session, url_for
-from models import User, Song, Playlist
 from database import db_session, init_db
+from models import User, Song, Playlist
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 
