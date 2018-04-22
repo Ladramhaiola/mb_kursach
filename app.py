@@ -22,7 +22,7 @@ def signup():
 			db_session.add(u)
 			db_session.commit()
 			session['user'] = {'username':username, 'logged_in': True}
-			return 'Success'
+			return redirect(url_for('secret'))
 		return 'Account already exists'
 	else:
 		return render_template('signup.html')
@@ -36,15 +36,22 @@ def signin():
 		if s:
 			if check_password_hash(s.password, password):
 				session['user'] = {'username':username, 'logged_in':True}
-				return 'logged_in'
+				return redirect(url_for('secret'))
 			else:
 				return 'wrong password'
 		return 'Account does not exist'
 	else:
 		return render_template('signin.html')
 
+@app.route('/logout')
 def logout():
 	session.pop('user')
+	return redirect(url_for('signin'))
+
+@app.route('/secret')
+def secret():
+	u = session['user']
+	return '<h1>%s</h1><a href="/logout">Log Out</a>' % str(u)
 
 @app.teardown_appcontext
 def shutdown_session(param):
