@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, backref
-
+from werkzeug.security import check_password_hash, generate_password_hash
 from database import Base
 
 class User(Base):
@@ -11,6 +11,10 @@ class User(Base):
 
 	playlists = relationship('Playlist', backref='users')
 
+	def __init__(self, username, password):
+		self.username = username
+		self.password = generate_password_hash(password)
+
 	@property
 	def serialize(self):
 		return {
@@ -19,7 +23,7 @@ class User(Base):
 		}
 
 	def __repr__(self):
-		return '<User (name: %s, id %s)>' % (self.username, self.id)
+		return 'User name %s' % self.username
 
 class Playlist(Base):
 	__tablename__ = 'playlists'

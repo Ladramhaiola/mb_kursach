@@ -10,16 +10,16 @@ Base.query = db_session.query_property()
 
 def init_db():
 	from models import User, Playlist, Song
-	Base.metadata.drop_all(bind=engine)
+	# Base.metadata.drop_all(bind=engine)
 	Base.metadata.create_all(bind=engine)
 
-	u1 = User(username='Sashenka :)', password='1234')
-	p1 = Playlist(name='aaiiii')
-	db_session.add(p1)
-	s1 = Song(name='I Hate everything about you', author='Three days grace')
-	db_session.add(s1)
-	p1.songs.append(s1)
-	u1.playlists.append(p1)
-	db_session.add(u1)
+	# u1 = User(username='Sashenka :)', password='1234')
+	# p1 = Playlist(name='aaiiii')
+	# db_session.add(p1)
+	# s1 = Song(name='I Hate everything about you', author='Three days grace')
+	# db_session.add(s1)
+	# p1.songs.append(s1)
+	# u1.playlists.append(p1)
+	# db_session.add(u1)
 
 	db_session.commit()
