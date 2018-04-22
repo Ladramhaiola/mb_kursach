@@ -3,7 +3,19 @@ from sqlalchemy.orm import relationship, backref
 from werkzeug.security import check_password_hash, generate_password_hash
 from database import Base
 
+
 class User(Base):
+
+	"""
+	Class that contains information about Users.
+
+	Attributes:
+		id (:obj:`int`, unique): id of User.
+		username (:obj:`str`, unique, not nullable): username of User.
+		password (:obj:`str`, not nullable): password of User.
+	
+    """
+
 	__tablename__ = 'users'
 	id = Column(Integer, primary_key=True, autoincrement=True)
 	username = Column(String(200), unique=True, nullable=False)
@@ -12,51 +24,96 @@ class User(Base):
 	playlists = relationship('Playlist', backref='users')
 
 	def __init__(self, username, password):
+        """
+        Args:
+            sername (:obj:`str`, unique, not nullable): username of User.
+            password (:obj:`str`, not nullable): password of User.
+        """
 		self.username = username
 		self.password = generate_password_hash(password)
 
 	@property
 	def serialize(self):
+        """
+        Return diction of class properties.
+        """
 		return {
 			'username': self.username,
 			'playlists': self.playlists
-		}
+        }
 
 	def __repr__(self):
+        """
+        Return str of class User.
+        """
 		return 'User name %s' % self.username
 
+
 class Playlist(Base):
-	__tablename__ = 'playlists'
-	id = Column(Integer, primary_key=True, autoincrement=True)
-	name = Column(String(200), nullable=False)
-	user_id = Column(Integer, ForeignKey('users.id'))
+    """
+    Class that contains information about Playlists.
 
-	songs = relationship('Song', backref='playlists')
+    Attributes:
+        id (:obj:`int`, unique): id of Playlist.
+        name (:obj:`str`, not nullable): name of Playlist.
+        user_id (:obj:`int`, ForeignKey): id of owner of Playlist.
+        
+    """
 
-	@property
-	def serialize(self):
-		return {
-			'name': self.name,
-			'songs': self.songs
-		}
+    __tablename__ = 'playlists'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(200), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'))
 
-	def __repr__(self):
-		return '<Playlist name: %s>' % self.name
+    songs = relationship('Song', backref='playlists')
+
+    @property
+    def serialize(self):
+         """
+        Return diction of class properties.
+        """
+        return {
+            'name': self.name,
+            'songs': self.songs
+        }
+
+    def __repr__(self):
+         """
+        Return str of class Playlist.
+        """
+        return '<Playlist name: %s>' % self.name
+
 
 class Song(Base):
-	__tablename__ = 'songs'
-	id = Column(Integer, primary_key=True)
-	name = Column(String(200), nullable=False)
-	author = Column(String(200), nullable=False)
+    """
+    Class that contains information about Songs.
 
-	playlist_ids = Column(Integer, ForeignKey('playlists.id'))
+    Attributes:
+        id (:obj:`int`, unique): id of Song.
+        name (:obj:`str`, not nullable): name of Song.
+        author (:obj:`str`, not nullable): name of Song.
+        user_id (:obj:`int`, ForeignKey): id of owner of Playlist.
+        
+    """
+    __tablename__ = 'songs'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(200), nullable=False)
+    author = Column(String(200), nullable=False)
 
-	@property
-	def serialize(self):
-		return {
-			'name': self.name,
-			'author': self.author
-		}
+    playlist_ids = Column(Integer, ForeignKey('playlists.id'))
 
-	def __repr__(self):
-		return '<Song (id: %d, name: %s, author: %s)>' % (self.id, self.name, self.author)
+    @property
+    def serialize(self):
+        """
+        Return diction of class properties.
+        """
+        return {
+            'name': self.name,
+            'author': self.author
+        }
+
+    def __repr__(self):
+        """
+        Return str of class Song.
+        """
+        return '<Song (id: %d, name: %s, author: %s)>' % (self.id, self.name, self.author)
