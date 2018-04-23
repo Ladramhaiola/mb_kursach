@@ -66,4 +66,4 @@ def shutdown_session(param):
 
 
 init_db()
- app.run('localhost', 8080, debug=True)
+app.run('localhost', 8080, debug=True)

@@ -22,9 +22,12 @@ def init_db():
 
 
 def add_Playlist(username, playlistname):
+    u = db_session.query(User).filter(User.username == username).first()
+    for i in u.playlists:
+        if i.name == playlistname:
+            return "Already exist"
     p = Playlist(name=playlistname)
     db_session.add(p)
-    u = db_session.query(User).filter(User.username == username).first()
     u.playlists.append(p)
     db_session.commit()
 
