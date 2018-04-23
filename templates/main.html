@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href = "{{ url_for("static", filename = "citty.ico")}}" type = "images/x-icon">
+    <title>Main</title>
+</head>
+<body>
+    <div id = "left">
+        <div class="search-wrap">
+            <label>Searching songs</label>
+            <div class="input-group">
+                <input id="songname"  class="input" placeholder="Enter song title or singer's name" >
+            </div>
+            <div class ="search-result">
+                    <label>Тут буде результат пошуку</label>
+                    <img src="{{ url_for("static", filename="pusheen.png") }}" width ="200px" height="200px" align="centr" alt="тут мав бути ще один котик">
+            </div>
+        </div>
+        
+    </div>
+    <div class="vline"></div>
+    <div id ="right">
+        <div class = "playlist-wrap">
+                <label>Playlists</label>
+                <div class = "playlist">
+                    <p>Playlist#1</p>
+                </div>
+                <div class = "playlist">
+                        <p>Playlist#2</p>
+                </div>
+
+                <img src="{{ url_for("static", filename="cat4.png") }}" width ="200px" height="200px" align="right" alt="тут мав бути котик">
+        </div>
+    </div>
+    
+</body>
+<style type="text/css">  
+    .search-wrap{
+        width: 520px;
+        margin-bottom: 5px;
+        margin-left: 20px;
+        margin-top:5px;
+        min-height: 480px;
+        box-shadow: 0 12px 15px 0 rgba(54, 54, 54, 0.008),0 17px 50px 0 rgba(59, 58, 58, 0.19);
+        padding: 50px 50px 50px 50px;
+        background: rgba(245, 237, 244, 0.918);
+    
+    }
+    .playlist-wrap{
+        width: 520px;
+        margin-bottom: 5px;
+        
+        min-height:500px;
+        margin-top:5px;
+        box-shadow: 0 12px 15px 0 rgba(54, 54, 54, 0.008),0 17px 50px 0 rgba(59, 58, 58, 0.19);
+        padding: 50px 50px 50px 50px;
+        background: rgba(245, 237, 244, 0.918);
+
+    }
+    .playlist{
+        box-shadow: 0 12px 15px 0 rgba(54, 54, 54, 0.008),0 17px 50px 0 rgba(59, 58, 58, 0.19);
+        padding: 50px 50px 50px 50px;
+        background: rgba(240, 213, 237, 0.973);
+
+        margin: 15px 15px 15px 15px;
+
+
+    }
+    label{
+       font-size: 30px;
+	   font-family:'Gothic';
+       color: #302e2e;
+       text-align: center;
+
+	   margin-right: 15px;
+	   padding-bottom:5px;
+	   margin: 1px 10px 20px 120px;
+	   display: inline-block;
+	   border-bottom: 2px solid transparent ; 
+	  
+    }
+    .vline{
+        border-left: 1px solid black;
+    }
+    .input-group{
+        margin: 1px 10px 20px 40px;
+
+    }
+    p{
+        font-family:'Gothic';
+
+    }
+    .input{
+       width: 400px;
+       height: 30px;
+	   color: #000000;
+       display: block;
+       font-family:'Gothic';
+       font-size: 14px;
+
+	   border: 1px solid rgb(255, 255, 255);
+       padding: 15px 20px;
+       margin: 1px 10px 20px 20px;
+	   background: rgb(247, 241, 245);
+       cursor: pointer;
+	}  
+  
+    #left { position: absolute; left: 0; top: 0; width: 50%; }
+    #right { position: absolute; right: 0; top: 0; width: 50%; } 
+ </style>
+ 
+</html>

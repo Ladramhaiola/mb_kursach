@@ -18,6 +18,10 @@ def load_user(user_id):
 def index():
     return render_template('signin.html')
 
+@app.route('/main')
+def index1():
+    return render_template('main.html')
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
