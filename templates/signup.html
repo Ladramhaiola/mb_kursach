@@ -4,31 +4,29 @@
 	<meta charset="UTF-8">
 	<title>Login</title>
 	<link rel = "stylesheet" type="text/css" href="{{ url_for('static', filename='css/loginstyle.css') }}">
+
 	<link rel="icon" href = "{{ url_for("static", filename = "citty.ico")}}" type = "images/x-icon">
 
 </head>
 <body>
 	<div class="login-wrap">
 		<transition name="component-fade">
-			<form method="post" action="/signup">
-				<label class= "tab ">Create your account</label>
+			<form action="/signup" method="post">
+				<label class="tab">Create your Account</label>
 				<div class="hr"></div>
-				
 				<div class="input-group">
-					<input id="username"  class="input" placeholder="username" >
-		  		</div>
-		  		<div class="input-group">
-					<input id="pass" type="password" class="input" data-type="password"  placeholder="password">
-				</div>  
-				    
-				<button type="submit" >Sign Up</button>
+					<input id="username" class="input" type="text" name="username" placeholder="username">
+				</div>
+				<div class="input-group">
+					<input id="pass" class="input" type="password" name="password" placeholder="password">
+				</div>
+				<input class="signbtn" type="submit" value="Sign Up">
 				<div class="hr"></div>
-			
-				<label for="tabSignningin"class ="tab"> Already have an account?     <a href="/signin" class="tab">    Sign In </a></label>
+				<label for="tabSigningin" class="tab">Already have an account? <a href="/signin" class="tab">Sign In</a></label>
 			</form>
-	</transition >
-	
-</div>
+		</transition >
+	</div>
 <img src="{{ url_for("static", filename="pusheen.png") }}"  align="right" alt="тут мав бути котик">
 </body>
+
 </html>

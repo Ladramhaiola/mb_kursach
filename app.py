@@ -22,7 +22,6 @@ def index():
 def index1():
     return render_template('main.html')
 
-
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':

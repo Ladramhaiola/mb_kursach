@@ -2,37 +2,31 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Login</title>
 	<link rel = "stylesheet" type="text/css" href="{{ url_for('static', filename='css/loginstyle.css') }}">
+
 	<link rel="icon" href = "{{ url_for("static", filename = "citty.ico")}}" type = "images/x-icon">
 
-	<title>Login</title>
 </head>
-
 <body>
 	<div class="login-wrap">
 		<transition name="component-fade">
-			<form method="post" action="/signin">
-				<label class = "tab">Enter your account</label>
-
+			<form action="/signin" method="post">
+				<label class="tab">Welcome Back!</label>
 				<div class="hr"></div>
 				<div class="input-group">
-					<input id="username"  class="input" placeholder="username" >
+					<input type="text" class="input" name="username" placeholder="username">
 				</div>
-		  		<div class="input-group">
-						<input id="pass" type="password" class="input" data-type="password"  placeholder="password">
-		  		</div>          
-		  		<button type="submit"  >Sign In</button>
+				<div class="input-group">
+					<input id="pass" type="password" name="password" placeholder="password" class="input">
+				</div>
+				<input type="submit" class="signbtn" value="Sign In">
 				<div class="hr"></div>
-				<label for="tabRegistration" class = "tab" > Don't have an account?     <a href="/signup" class="tab">    Sign Up </a></label>
-		  	</form>
-		</transition >
+				<label for="tabRegistration" class="tab">Don't have an account?<a href="/signup" class="tab">Sign Up</a></label>
+			</form>
+		</transition>
 	</div>
-	<img src= "{{ url_for("static", filename ="pusheen.png") }}"  align="right" alt="тут мав бути котик">
-<p><a href="/main">main page </a></p>
+	<img src="{{ url_for("static", filename="pusheen.png") }}"  align="right" alt="тут мав бути котик">
+	<a href="/main" class="tab">main page</a>
 </body>
-<style>
-	
-</style>
 </html>
