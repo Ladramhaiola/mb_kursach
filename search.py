@@ -8,7 +8,7 @@ def convert(search_result):
   song_id = search_result['id']['videoId']
   title = search_result['snippet']['title']
   thumbnail_url = search_result['snippet']['thumbnails']['default']['url']
-  s = Song(id=song_id, title=title, thumbnail_url=thumbnail_url)
+  s = Song(youtube_hash=song_id, title=title, thumbnail_url=thumbnail_url)
   return s
 
 

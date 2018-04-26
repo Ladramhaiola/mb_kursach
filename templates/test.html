@@ -2,17 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <title>Document</title>
 </head>
 <body>
     <script type="text/javascript">
-        axios.get('/api/search/Lil Peep')
-        .then(resp => {
-            console.log(resp)
-        })
-        .catch(err => {
-            console.log(err)
+        let data = {"data": "Remember the Milk"}
+
+        $.ajax({
+            type: 'PUT',
+            url: 'http://localhost:5000/api/4',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: resp => {
+                console.log(resp)
+            }
         })
     </script>
 </body>

@@ -1,0 +1,13 @@
+digraph G {
+prog=dot;
+mode=ipsep;
+overlap=ipsep;
+sep="0.01";
+concentrate=False;
+rankdir=LR;
+association [shape=plaintext, label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0"><TR><TD ALIGN="CENTER">association</TD></TR><TR><TD BORDER="1" CELLPADDING="0"></TD></TR><TR><TD ALIGN="LEFT" PORT="user_id">- user_id : INTEGER(11)</TD></TR><TR><TD ALIGN="LEFT" PORT="song_id">- song_id : INTEGER(11)</TD></TR></TABLE>>, fontname="Bitstream-Vera Sans", fontsize="7.0"];
+users [shape=plaintext, label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0"><TR><TD ALIGN="CENTER">users</TD></TR><TR><TD BORDER="1" CELLPADDING="0"></TD></TR><TR><TD ALIGN="LEFT" PORT="id">- id : INTEGER(11)</TD></TR><TR><TD ALIGN="LEFT" PORT="username">- username : VARCHAR(200)</TD></TR><TR><TD ALIGN="LEFT" PORT="password">- password : VARCHAR(200)</TD></TR></TABLE>>, fontname="Bitstream-Vera Sans", fontsize="7.0"];
+songs [shape=plaintext, label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0"><TR><TD ALIGN="CENTER">songs</TD></TR><TR><TD BORDER="1" CELLPADDING="0"></TD></TR><TR><TD ALIGN="LEFT" PORT="id">- id : INTEGER(11)</TD></TR><TR><TD ALIGN="LEFT" PORT="youtube_hash">- youtube_hash : VARCHAR(200)</TD></TR><TR><TD ALIGN="LEFT" PORT="title">- title : VARCHAR(200)</TD></TR><TR><TD ALIGN="LEFT" PORT="thumbnail_url">- thumbnail_url : VARCHAR(200)</TD></TR></TABLE>>, fontname="Bitstream-Vera Sans", fontsize="7.0"];
+users -> association  [headlabel="+ id", taillabel="+ user_id", arrowhead=none, arrowtail=empty, fontname="Bitstream-Vera Sans", fontsize="7.0"];
+songs -> association  [headlabel="+ id", taillabel="+ song_id", arrowhead=none, arrowtail=empty, fontname="Bitstream-Vera Sans", fontsize="7.0"];
+}
