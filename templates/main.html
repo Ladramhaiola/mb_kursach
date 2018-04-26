@@ -34,6 +34,9 @@
         <div id = "list" class = "playlist-wrap">
             <h1 align ="center">Playlists</h1>
         <a  align ="center" class = "add" href="javascript:Add()">Add playlist</a>
+        <div id = "playlistname">
+
+        </div>
                 <div id ="1" class = "playlist">
                     <p >Playlist#1</p>
                 </div>
@@ -50,12 +53,7 @@
     function searchsong(){
 
         var result = document.querySelector("#songname").value  
-        var parent = document.getElementById('list1');  
-        /*if (parent.firstChild ){
-                for (i = 0; i <= 15; i++) {
-                    document.getElementById('songID'+i).remove
-            }}*/
-        
+        var parent = document.getElementById('list1');          
         axios.get('/api/search/'+result)
         .then(resp => {
             var i ;
@@ -75,16 +73,30 @@
     }
 </script>
 <script>  
-    function Add(num){ 
-        num=num+2;;
-        var parent = document.getElementById('list');  
-        
-        var div = document.createElement('DIV'); 
-        div = parent.appendChild(div);  
-        div.className="playlist";
-        div.id=num;
-        div.innerHTML = 'Playlist#'; 
-    }  
+    function Add(){ 
+        var parent1 = document.getElementById('playlistname');  
+        var inputnameplaylist = document.createElement('input');
+        inputnameplaylist.id = "input1";
+        var btnconfirm = document.createElement('button');
+        btnconfirm.text = "CLICK ME"
+        btnconfirm.setAttribute("onclick","addpl()");
+        inputnameplaylist.setAttribute("type", "text");
+        inputnameplaylist.setAttribute("placeholder", "Enter title of your playlist");
+        inputnameplaylist = parent1.appendChild(inputnameplaylist);
+        inputnameplaylist = parent1.appendChild(btnconfirm);
+      
+    }
+    </script>
+    <script>
+       function addpl(){
+            var inputnameplaylist = document.getElementById('input1').value;
+            var parent = document.getElementById('list');  
+            var div = document.createElement('DIV'); 
+            div = parent.appendChild(div);  
+            div.className = "playlist";
+            div.innerHTML=inputnameplaylist;
+
+        }
     /*function Del(){
         var parent = document.getElementById("list");
         var child = document.getElementById(id);

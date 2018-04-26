@@ -64,7 +64,7 @@ def logout():
 @app.route('/secret')
 @login_required
 def secret():
-    return render_template('main.html')
+    return render_template('test.html')
 
 @app.route('/api/search/<target>')
 @login_required
@@ -80,7 +80,7 @@ def add_song(song_id):
 
 @app.route('/api/serve_song/<song_id>')
 def serve_song(song_id):
-    return send_from_directory('src', str(song_id) + 'safe.mp3')
+    return send_from_directory('src', str(song_id) + '.mp3')
 
 
 @app.teardown_appcontext
