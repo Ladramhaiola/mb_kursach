@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-    <link rel = "stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-    <link rel="icon" href = "{{ url_for("static", filename = "citty.ico")}}" type = "images/x-icon">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename = 'citty.ico')}}" type = "images/x-icon">
     <title>Main</title>
 </head>
 <body>
@@ -15,70 +14,88 @@
 
     <div class = "left">
         <div class="search-wrap">
-                <div class="resize"></div>
-            <h1 align ="center">Searching songs</h1>
+            <div id = "cattt">
+                <img id = "searchcat" src="{{ url_for("static", filename="pusheen.png") }}" width ="60px" height="60px"  alt="тут мав бути ще один котик">  
+
+            </div>
+            <div class="resize"></div>
+            <h1 align ="center">Searching songs </h1>
             <h3  align ="left" >Enter song title or singer's name</h3>
             <input id="songname" class = "input" placeholder=" (e.g. Kill The Humans)" >
                 <button onclick="searchsong()">search</button>
             <div class ="search-result">
-                    <ul id = "list1">
+                    <ul id = "listone">
                        
                     </ul>
-                    <img src="{{ url_for("static", filename="pusheen.png") }}" width ="200px" height="200px"  alt="тут мав бути ще один котик">  
-            </div>
+                    
+                </div>
+                <p id ="test"> </p>
         </div>
     </div>
     
 
     <div class ="right">
         <div id = "list" class = "playlist-wrap">
-            <h1 align ="center">Playlists</h1>
-        <a  align ="center" class = "add" href="javascript:Add()">Add playlist</a>
-        <div id = "playlistname">
-
+            
+            <h1 align ="center">My songs</h1>
+            <h3  align ="left" >Enter song title or singer's name</h3>
+            <input id="mysongname" class = "input2" placeholder=" (e.g. Kill The Humans)" >
+            <button    cursor: pointer   onclick="searchsong()">search</button>
+            <div class ="search-result">
+                <ul id = "listtwo">
+                   
+                </ul>
+               
         </div>
-                <div id ="1" class = "playlist">
-                    <p >Playlist#1</p>
-                </div>
-                <div  id ="2" class = "playlist">
-                    <p>Playlist#2</p>
-                </div>
-                <span id="test">Вы выбрали <strong>ничего </strong></span>
-                <img src="{{ url_for("static", filename="cat4.png") }}" width ="200px" height="200px" align="right" alt="тут мав бути котик">
+            <img  src="{{ url_for("static", filename="cat4.png") }}" width ="200px" height="200px" align="right" alt="тут мав бути котик">
         </div>
     </div>
     
 </body>
 <script type="text/javascript">
     function searchsong(){
-
+            
+        if (document.getElementById(1) != null){
+            for (i = 0; i <= 15; i++) {
+                $("#"+i).remove();
+            }
+            
+        }
         var result = document.querySelector("#songname").value  
-        var parent = document.getElementById('list1');          
+        var parent = document.getElementById('listone');  
+        
         axios.get('/api/search/'+result)
         .then(resp => {
             var i ;
+            res = resp;
+            console.log(resp);
             for (i = 0; i <= 15; i++) {
 
-                console.log(resp)
                 var listelement = document.createElement('li');
-                listelement.id = "songID"+i;
+                listelement.id = i;
+                listelement.className="song";
+
                 listelement.innerHTML=resp.data.result[i].title;
                 parent.appendChild(listelement);
             }
+           
         })
-
+       
         .catch(err => {
             console.log(err)
         })
+        
     }
 </script>
-<script>  
+<!--<script>  
     function Add(){ 
         var parent1 = document.getElementById('playlistname');  
         var inputnameplaylist = document.createElement('input');
+        //inputnameplaylist.setAttribute("class", "input")
         inputnameplaylist.id = "input1";
         var btnconfirm = document.createElement('button');
-        btnconfirm.text = "CLICK ME"
+        btnconfirm.setAttribute("text","CLICK ME");
+        console.log("first")
         btnconfirm.setAttribute("onclick","addpl()");
         inputnameplaylist.setAttribute("type", "text");
         inputnameplaylist.setAttribute("placeholder", "Enter title of your playlist");
@@ -89,27 +106,25 @@
     </script>
     <script>
        function addpl(){
+            console.log("second")
             var inputnameplaylist = document.getElementById('input1').value;
-            var parent = document.getElementById('list');  
+            var parent = document.getElementById('playlistname');  
             var div = document.createElement('DIV'); 
             div = parent.appendChild(div);  
             div.className = "playlist";
             div.innerHTML=inputnameplaylist;
 
         }
-    /*function Del(){
-        var parent = document.getElementById("list");
-        var child = document.getElementById(id);
-        parent.removeChild(child);
-    }*/
-    </script> 
+   
+    </script> -->
    
     <script>
         $(document).ready(function() {
             var p = $(".search-wrap");
             var d = $(".playlist-wrap");
             var r = $(".resize");
-            var i = $(".input");
+            var i = $("#songname");
+            var ii = $("#mysongname");
 
           
             var curr_width = p.width()
@@ -118,10 +133,11 @@
         $(document).mousemove(function(e) {
             var change = curr_width + (e.clientX - curr_width);
             var input_change = curr_width + (e.clientX - curr_width - 100);
+
               
             if(unlock) {
                  
-                if(change > 349 && change < 950) {
+                if(change > 579 && change < 1250) {
                     p.css("width", change);
                     d.css("margin-left", change);
                     i.css("width", input_change);
@@ -148,9 +164,20 @@
     })
     </script>
     <script>
-        document.querySelector('#list').addEventListener('click', function(e){ // Вешаем обработчик клика на UL, не LI
-            var id = e.target.id; // Получили ID, т.к. в e.target содержится элемент по которому кликнули
-            document.querySelector('#test strong').innerHTML = id; // For example
+        document.querySelector('#listone').addEventListener('click', function(e){ // Вешаем обработчик клика на UL, не LI
+        var id = e.target.id; // Получили ID, т.к. в e.target содержится элемент по которому кликнули
+        document.querySelector('#test').innerHTML = id;
+        $.ajax({
+            type: 'PUT',
+            url: 'http://localhost:8080/api/song',
+            dataType: "json",
+            data: JSON.stringify(res.data.result[id]),
+            contentType: 'application/json',
+            success: resp => console.log(resp),
+            error: err => console.log(err)
+        })
+        
         });
     </script>
+   
 </html>

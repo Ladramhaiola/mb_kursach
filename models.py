@@ -1,19 +1,25 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
 from werkzeug.security import generate_password_hash
 from database import Base
 from flask_login import UserMixin
+from flask_restful import reqparse, Resource, Api
+
+class Association(Base):
+    __tablename__ = 'association'
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    song_id = Column(Integer, ForeignKey('songs.id'), primary_key=True)
+    song = relationship("Song", back_populates="users")
+    user = relationship("User", back_populates="songs")
 
 class User(Base, UserMixin):
 
     """
     Class that contains information about Users.
-
     Attributes:
         id (:obj:`int`, unique): id of User.
         username (:obj:`str`, unique, not nullable): username of User.
         password (:obj:`str`, not nullable): password of User.
-
     """
 
     __tablename__ = 'users'
@@ -21,7 +27,7 @@ class User(Base, UserMixin):
     username = Column(String(200), unique=True, nullable=False)
     password = Column(String(200), nullable=False)
 
-    playlists = relationship('Playlist', backref='users')
+    songs = relationship('Association', back_populates="user")
 
     def __init__(self, username, password):
         """
@@ -39,7 +45,7 @@ class User(Base, UserMixin):
         """
         return {
             'username': self.username,
-            'playlists': self.playlists
+            'songs': self.songs
         }
 
     def __repr__(self):
@@ -49,45 +55,9 @@ class User(Base, UserMixin):
         return 'User name %s' % self.username
 
 
-class Playlist(Base):
-    """
-    Class that contains information about Playlists.
-
-    Attributes:
-        id (:obj:`int`, unique): id of Playlist.
-        name (:obj:`str`, not nullable): name of Playlist.
-        user_id (:obj:`int`, ForeignKey): id of owner of Playlist.
-        
-    """
-
-    __tablename__ = 'playlists'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(200), nullable=False)
-    user_id = Column(Integer, ForeignKey('users.id'))
-
-    songs = relationship('Song', backref='playlists')
-
-    @property
-    def serialize(self):
-        """
-        Return diction of class properties.
-        """
-        return {
-            'name': self.name,
-            'songs': self.songs
-        }
-
-    def __repr__(self):
-        """
-        Return str of class Playlist.
-        """
-        return '<Playlist name: %s>' % self.name
-
-
 class Song(Base):
     """
     Class that contains information about Songs.
-
     Attributes:
         id (:obj:`int`, unique): id of Song.
         name (:obj:`str`, not nullable): name of Song.
@@ -96,11 +66,14 @@ class Song(Base):
         
     """
     __tablename__ = 'songs'
-    id = Column(String(200), primary_key=True)
+    id = Column(Integer, primary_key=True)
+    youtube_hash = Column(String(200))
     title = Column(String(200), nullable=False)
     thumbnail_url = Column(String(200))
 
-    playlist_ids = Column(Integer, ForeignKey('playlists.id'))
+    users = relationship(
+        "Association",
+        back_populates="song")
 
     @property
     def serialize(self):
@@ -108,7 +81,7 @@ class Song(Base):
         Return diction of class properties.
         """
         return {
-            'id': self.id,
+            'youtube_hash': self.youtube_hash,
             'title': self.title,
             'thumbnail_url': self.thumbnail_url
         }
@@ -117,4 +90,4 @@ class Song(Base):
         """
         Return str of class Song.
         """
-        return '<Song (id: %s, title: %s, url: %s)>' % (self.id, self.title, self.thumbnail_url)
+        return '<Song (title: %s, url: %s)>' % (self.title, self.thumbnail_url)

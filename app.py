@@ -1,10 +1,12 @@
-from flask import Flask, redirect, render_template, request, url_for, json, Response, jsonify, send_from_directory
-from database import db_session, init_db, delete_Playlist, add_Playlist, get_Playlists, add_Song, get_Songs
-from models import User
+from flask import Flask, redirect, render_template, request, url_for, json, Response, jsonify, send_from_directory, session
+from database import db_session, init_db, SongResource, SongListResource
+from models import User, Song
 from werkzeug.security import check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from search import youtube_search
 from os import system, getcwd
+from flask_restful import Api
+
 
 app = Flask(__name__, static_folder='./static')
 app.secret_key = 'total secret'
@@ -12,13 +14,15 @@ app.secret_key = 'total secret'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+api = Api(app)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 @app.route('/')
 def index():
-    return render_template('signup.html')
+    return render_template('signin.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -56,37 +60,34 @@ def signin():
 
 
 @app.route('/logout')
-@login_required
 def logout():
     logout_user()
     return redirect(url_for('signin'))
 
+
 @app.route('/secret')
-@login_required
 def secret():
-    return render_template('test.html')
+    return render_template('main.html')
+
 
 @app.route('/api/search/<target>')
-@login_required
 def look(target):
     resp = [vid.serialize for vid in youtube_search(target)]
     return jsonify(result = resp)
 
-@app.route('/api/add_song/<song_id>')
-@login_required
-def add_song(song_id):
-    system('youtube-dl -o "{0}/src/{1}.mp3" --extract-audio --audio-format mp3 http://www.youtube.com/watch?v={1}'.format(getcwd(), song_id))
 
-
-@app.route('/api/serve_song/<song_id>')
-def serve_song(song_id):
-    return send_from_directory('src', str(song_id) + '.mp3')
+api.add_resource(SongResource, '/api/song')
+api.add_resource(SongListResource, '/api/songs')
 
 
 @app.teardown_appcontext
 def shutdown_session(param):
     db_session.remove()
+    
 
+@app.route('/api/serve/<youtube_hash>')
+def serve(youtube_hash):
+    return send_from_directory('src', '{}.mp3'.format(youtube_hash))
 
 init_db()
 app.run('localhost', 8080, debug=True)
