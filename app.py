@@ -1,10 +1,12 @@
-from flask import Flask, json, redirect, render_template, request, session, url_for, jsonify
+from flask import Flask, redirect, render_template, request, url_for, json, Response, jsonify, send_from_directory
 from database import db_session, init_db, delete_Playlist, add_Playlist, get_Playlists, add_Song, get_Songs
 from models import User
 from werkzeug.security import check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from search import youtube_search
+from os import system, getcwd
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./static')
 app.secret_key = 'total secret'
 
 login_manager = LoginManager()
@@ -16,11 +18,8 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    return render_template('signin.html')
+    return render_template('signup.html')
 
-@app.route('/main')
-def index1():
-    return render_template('main.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -62,11 +61,27 @@ def logout():
     logout_user()
     return redirect(url_for('signin'))
 
-
 @app.route('/secret')
 @login_required
 def secret():
-    return '<h1>%s</h1><a href="/logout">Log Out</a>' % current_user.username
+    return render_template('main.html')
+
+@app.route('/api/search/<target>')
+@login_required
+def look(target):
+    resp = [vid.serialize for vid in youtube_search(target)]
+    return jsonify(result = resp)
+
+@app.route('/api/add_song/<song_id>')
+@login_required
+def add_song(song_id):
+    system('youtube-dl -o "{0}/src/{1}.mp3" --extract-audio --audio-format mp3 http://www.youtube.com/watch?v={1}'.format(getcwd(), song_id))
+
+
+@app.route('/api/serve_song/<song_id>')
+def serve_song(song_id):
+    return send_from_directory('src', str(song_id) + 'safe.mp3')
+
 
 @app.teardown_appcontext
 def shutdown_session(param):

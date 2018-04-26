@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     <link rel = "stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="icon" href = "{{ url_for("static", filename = "citty.ico")}}" type = "images/x-icon">
     <title>Main</title>
@@ -16,107 +18,127 @@
                 <div class="resize"></div>
             <h1 align ="center">Searching songs</h1>
             <h3  align ="left" >Enter song title or singer's name</h3>
-            
-                <input id="songname"  class="input" placeholder=" (e.g. Kill The Humans)" >
-            
+            <input id="songname" class = "input" placeholder=" (e.g. Kill The Humans)" >
+                <button onclick="searchsong()">search</button>
             <div class ="search-result">
-                  
-                    <label>Search result</label>
-                    <img src="{{ url_for("static", filename="pusheen.png") }}" width ="200px" height="200px"  alt="тут мав бути ще один котик">
-                    
+                    <ul id = "list1">
+                       
+                    </ul>
+                    <img src="{{ url_for("static", filename="pusheen.png") }}" width ="200px" height="200px"  alt="тут мав бути ще один котик">  
             </div>
-           
-            
         </div>
-        
     </div>
     
-    <div class="vline"></div>
+
     <div class ="right">
         <div id = "list" class = "playlist-wrap">
             <h1 align ="center">Playlists</h1>
-        
-                  
         <a  align ="center" class = "add" href="javascript:Add()">Add playlist</a>
                 <div id ="1" class = "playlist">
                     <p >Playlist#1</p>
-                    
                 </div>
                 <div  id ="2" class = "playlist">
-                        <p>Playlist#2</p>
+                    <p>Playlist#2</p>
                 </div>
                 <span id="test">Вы выбрали <strong>ничего </strong></span>
-            
                 <img src="{{ url_for("static", filename="cat4.png") }}" width ="200px" height="200px" align="right" alt="тут мав бути котик">
         </div>
     </div>
     
 </body>
+<script type="text/javascript">
+    function searchsong(){
+
+        var result = document.querySelector("#songname").value  
+        var parent = document.getElementById('list1');  
+        /*if (parent.firstChild ){
+                for (i = 0; i <= 15; i++) {
+                    document.getElementById('songID'+i).remove
+            }}*/
+        
+        axios.get('/api/search/'+result)
+        .then(resp => {
+            var i ;
+            for (i = 0; i <= 15; i++) {
+
+                console.log(resp)
+                var listelement = document.createElement('li');
+                listelement.id = "songID"+i;
+                listelement.innerHTML=resp.data.result[i].title;
+                parent.appendChild(listelement);
+            }
+        })
+
+        .catch(err => {
+            console.log(err)
+        })
+    }
+</script>
 <script>  
     function Add(num){ 
-    num=num+2;;
-    var parent = document.getElementById('list');  
-    
-    var div = document.createElement('DIV'); 
-    div = parent.appendChild(div);  
-    div.className="playlist";
-    div.id=num;
-    div.innerHTML = 'Playlist#'+num; 
+        num=num+2;;
+        var parent = document.getElementById('list');  
+        
+        var div = document.createElement('DIV'); 
+        div = parent.appendChild(div);  
+        div.className="playlist";
+        div.id=num;
+        div.innerHTML = 'Playlist#'; 
     }  
-    function Del(){
+    /*function Del(){
         var parent = document.getElementById("list");
         var child = document.getElementById(id);
         parent.removeChild(child);
-    }
+    }*/
     </script> 
+   
     <script>
-            $(document).ready(function() {
-          var p = $(".search-wrap");
-          var d = $(".playlist-wrap");
-          var r = $(".resize");
-          var i = $(".input");
+        $(document).ready(function() {
+            var p = $(".search-wrap");
+            var d = $(".playlist-wrap");
+            var r = $(".resize");
+            var i = $(".input");
 
           
-          var curr_width = p.width()
-          var unlock = false;
+            var curr_width = p.width()
+            var unlock = false;
           
-          $(document).mousemove(function(e) {
-                var change = curr_width + (e.clientX - curr_width);
-                var input_change = curr_width + (e.clientX - curr_width - 100);
+        $(document).mousemove(function(e) {
+            var change = curr_width + (e.clientX - curr_width);
+            var input_change = curr_width + (e.clientX - curr_width - 100);
               
-             if(unlock) {
+            if(unlock) {
                  
-                      if(change > 349 && change < 950) {
-                          p.css("width", change);
-                          d.css("margin-left", change);
-                          i.css("width", input_change);
-                      }     
+                if(change > 349 && change < 950) {
+                    p.css("width", change);
+                    d.css("margin-left", change);
+                    i.css("width", input_change);
+                }     
               }
           });
           
-          r.mousedown(function(e) {
-              curr_width = p.width();
-              unlock = true;
-              r.css("background-color", "rgba(1, 1, 1, 1)");
-          });
-      
-          $(document).mousedown(function(e) {
-              if(unlock) {
-                e.preventDefault();
-              }}
-            )
-          $(document).mouseup(function(e) {
-          unlock = false;
-          $("#debug").text("");
-          r.css("background-color", "rgba(0, 0, 0, 0.1)");
+        r.mousedown(function(e) {
+            curr_width = p.width();
+            unlock = true;
+            r.css("background-color", "rgba(1, 1, 1, 1)");
         });
-          })
-          </script>
-          <script>
-            document.querySelector('#list').addEventListener('click', function(e){ // Вешаем обработчик клика на UL, не LI
+      
+        $(document).mousedown(function(e) {
+            if(unlock) {
+            e.preventDefault();
+            }}
+        )
+        $(document).mouseup(function(e) {
+            unlock = false;
+            $("#debug").text("");
+            r.css("background-color", "rgba(0, 0, 0, 0.1)");
+        });
+    })
+    </script>
+    <script>
+        document.querySelector('#list').addEventListener('click', function(e){ // Вешаем обработчик клика на UL, не LI
             var id = e.target.id; // Получили ID, т.к. в e.target содержится элемент по которому кликнули
             document.querySelector('#test strong').innerHTML = id; // For example
-          });
-            </script>
-
+        });
+    </script>
 </html>

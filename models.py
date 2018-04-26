@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, backref
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 from database import Base
 from flask_login import UserMixin
 
@@ -96,9 +96,9 @@ class Song(Base):
         
     """
     __tablename__ = 'songs'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(200), nullable=False)
-    author = Column(String(200), nullable=False)
+    id = Column(String(200), primary_key=True)
+    title = Column(String(200), nullable=False)
+    thumbnail_url = Column(String(200))
 
     playlist_ids = Column(Integer, ForeignKey('playlists.id'))
 
@@ -108,12 +108,13 @@ class Song(Base):
         Return diction of class properties.
         """
         return {
-            'name': self.name,
-            'author': self.author
+            'id': self.id,
+            'title': self.title,
+            'thumbnail_url': self.thumbnail_url
         }
 
     def __repr__(self):
         """
         Return str of class Song.
         """
-        return '<Song (id: %d, name: %s, author: %s)>' % (self.id, self.name, self.author)
+        return '<Song (id: %s, title: %s, url: %s)>' % (self.id, self.title, self.thumbnail_url)
