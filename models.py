@@ -16,12 +16,10 @@ class User(Base, UserMixin):
 
     """
     Class that contains information about Users.
-
     Attributes:
         id (:obj:`int`, unique): id of User.
         username (:obj:`str`, unique, not nullable): username of User.
         password (:obj:`str`, not nullable): password of User.
-
     """
 
     __tablename__ = 'users'
@@ -60,7 +58,6 @@ class User(Base, UserMixin):
 class Song(Base):
     """
     Class that contains information about Songs.
-
     Attributes:
         id (:obj:`int`, unique): id of Song.
         name (:obj:`str`, not nullable): name of Song.

@@ -20,9 +20,7 @@ def init_db():
     Base.metadata.create_all(bind=engine)
     db_session.commit()
 
-
-from models import User, Song, Association
-
+from models import Association, User, Song
 
 song_fields = {
     'title': fields.String,

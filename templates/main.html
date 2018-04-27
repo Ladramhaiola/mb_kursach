@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +9,6 @@
     <link rel="icon" href="{{ url_for('static', filename = 'citty.ico')}}" type = "images/x-icon">
     <title>Main</title>
 </head>
-
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -27,134 +24,101 @@
             <input id="songname" class = "input" placeholder=" (e.g. Kill The Humans)" >
                 <button onclick="searchsong()">search</button>
             <div class ="search-result">
-                <ul id = "listone">
-
-                </ul>
-            </div>
-
-            <p id ="test"> </p>
-
+                    <ul id = "listone">
+                       
+                    </ul>
+                    
+                </div>
+                <p id ="test"> </p>
         </div>
     </div>
-
     
+
     <div class ="right">
         <div id = "list" class = "playlist-wrap">
+            
             <h1 align ="center">My songs</h1>
             <h3  align ="left" >Enter song title or singer's name</h3>
             <input id="mysongname" class = "input2" placeholder=" (e.g. Kill The Humans)" >
             <button    cursor: pointer   onclick="searchsong()">search</button>
             <div class ="search-result">
                 <ul id = "listtwo">
+                   
                 </ul>
+               
         </div>
             <img  src="{{ url_for("static", filename="cat4.png") }}" width ="200px" height="200px" align="right" alt="тут мав бути котик">
-
         </div>
     </div>
-
+    
 </body>
-
 <script type="text/javascript">
-
     function searchsong(){
-
+            
         if (document.getElementById(1) != null){
-
             for (i = 0; i <= 15; i++) {
                 $("#"+i).remove();
             }
+            
         }
-
         var result = document.querySelector("#songname").value  
         var parent = document.getElementById('listone');  
         
         axios.get('/api/search/'+result)
         .then(resp => {
-
             var i ;
             res = resp;
             console.log(resp.data);
             for (i = 0; i <= 15; i++) {
+
                 var listelement = document.createElement('li');
                 listelement.id = i;
                 listelement.className="song";
+
                 listelement.innerHTML=resp.data.result[i].title;
                 parent.appendChild(listelement);
             }
+           
         })
-
+       
         .catch(err => {
             console.log(err)
         })
+        
     }
-
 </script>
-
 <!--<script>  
-
     function Add(){ 
-
         var parent1 = document.getElementById('playlistname');  
-
         var inputnameplaylist = document.createElement('input');
-
         //inputnameplaylist.setAttribute("class", "input")
-
         inputnameplaylist.id = "input1";
-
         var btnconfirm = document.createElement('button');
-
         btnconfirm.setAttribute("text","CLICK ME");
-
         console.log("first")
-
         btnconfirm.setAttribute("onclick","addpl()");
-
         inputnameplaylist.setAttribute("type", "text");
-
         inputnameplaylist.setAttribute("placeholder", "Enter title of your playlist");
-
         inputnameplaylist = parent1.appendChild(inputnameplaylist);
-
         inputnameplaylist = parent1.appendChild(btnconfirm);
-
       
-
     }
-
     </script>
-
     <script>
-
        function addpl(){
-
             console.log("second")
-
             var inputnameplaylist = document.getElementById('input1').value;
-
             var parent = document.getElementById('playlistname');  
-
             var div = document.createElement('DIV'); 
-
             div = parent.appendChild(div);  
-
             div.className = "playlist";
-
             div.innerHTML=inputnameplaylist;
 
-
-
         }
-
    
-
     </script> -->
-
    
-
     <script>
-
         $(document).ready(function() {
             var p = $(".search-wrap");
             var d = $(".playlist-wrap");
@@ -162,80 +126,62 @@
             var i = $("#songname");
             var ii = $("#mysongname");
 
+          
             var curr_width = p.width()
             var unlock = false;
-
+          
         $(document).mousemove(function(e) {
             var change = curr_width + (e.clientX - curr_width);
             var input_change = curr_width + (e.clientX - curr_width - 100);
 
+              
             if(unlock) {
+                 
                 if(change > 579 && change < 1250) {
                     p.css("width", change);
                     d.css("margin-left", change);
                     i.css("width", input_change);
                 }     
-            }
-        });
-
+              }
+          });
           
-
         r.mousedown(function(e) {
-
             curr_width = p.width();
             unlock = true;
             r.css("background-color", "rgba(1, 1, 1, 1)");
-
         });
-
       
-
         $(document).mousedown(function(e) {
-
             if(unlock) {
-
             e.preventDefault();
-
             }}
-
         )
-
         $(document).mouseup(function(e) {
-
             unlock = false;
             $("#debug").text("");
             r.css("background-color", "rgba(0, 0, 0, 0.1)");
-
         });
-
     })
-
     </script>
-
     <script>
-
-    document.querySelector('#listone').addEventListener('click', function(e){ // Вешаем обработчик клика на UL, не LI
-
+        document.querySelector('#listone').addEventListener('click', function(e){ // Вешаем обработчик клика на UL, не LI
         var id = e.target.id; // Получили ID, т.к. в e.target содержится элемент по которому кликнули
-
         document.querySelector('#test').innerHTML = id;
         console.log(res.data.user_id);
 
         res.data.result[id].userid = res.data.user_id;
         console.log(res.data.result[id].userid);
-
         $.ajax({
             type: 'PUT',
             url: 'http://localhost:8080/api/song',
             dataType: "json",
             data: JSON.stringify(res.data.result[id]),
             contentType: 'application/json',
-
+            
             success: resp => console.log('ura'),
             error: err => console.log(err)
         })
-
-    
+       
         var sound      = document.createElement('audio');
         sound.id       = 'audio-player';
         sound.controls = 'controls';
@@ -244,11 +190,8 @@
         sound.type     = 'audio/mpeg';
         sound.preload  = 'none';
         e.target.appendChild(sound);
-
-    });
-
+       
+        });
     </script>
-
    
-
 </html>

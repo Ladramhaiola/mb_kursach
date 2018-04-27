@@ -3,6 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Login</title>
+	<link rel = "stylesheet" type="text/css" href="{{ url_for('static', filename='css/loginstyle.css') }}">
+
+	<link rel="icon" href = "{{ url_for("static", filename = "citty.ico")}}" type = "images/x-icon">
+
 </head>
 <body>
 	<div class="login-wrap">
@@ -16,7 +20,7 @@
 				<div class="input-group">
 					<input id="pass" class="input" type="password" name="password" placeholder="password">
 				</div>
-				<input id="signbtn" type="submit" value="Sign Up">
+				<input class="signbtn" type="submit" value="Sign Up">
 				<div class="hr"></div>
 				<label for="tabSigningin" class="tab">Already have an account? <a href="/signin" class="tab">Sign In</a></label>
 			</form>
@@ -24,95 +28,4 @@
 	</div>
 <img src="{{ url_for("static", filename="pusheen.png") }}"  align="right" alt="тут мав бути котик">
 </body>
-<style>
-	
-	.login-wrap{ 
-		width: 100%;
-		margin-bottom: 100px;
-		margin-left: 390px;
-		margin-right:150px;
-		margin-top:30px;
-		max-width: 380px;
-		min-height: 220px;
-		position: relative;
-		top: 50px ;
-		box-shadow: 0 12px 15px 0 rgba(54, 54, 54, 0.008),0 17px 50px 0 rgba(59, 58, 58, 0.19);
-		padding: 50px 50px 5px 50px;
-		background: rgba(245, 237, 244, 0.918);
-	}
-
-	.tab{
-		font-size: 20px;
-		font-family:'Gothic';
-		color: #302e2e;
-		margin-right: 15px;
-		padding-bottom:5px;
-		margin: 1px 1px 2px 0px;
-		display: inline-block;
-		border-bottom: 2px solid transparent ; 
-		cursor: pointer;
-	}
-
-	.sign-in-form, .sign-up-form{
-		top: 100px;
-		left: 50px;
-		right: 50px;
-		position: absolute;}
-
-	.input-group{
-		margin-bottom: 10px ; 
-	}
-	
-	.input{
-		width: 350px;
-		color: #000000;
-		display: block;
-		border: 1px solid rgb(255, 255, 255);
-		padding: 15px 20px;
-		background: rgb(247, 241, 245);
-	}
-		
-	img{
-		border: #000000;
-		float: right; 
-    	margin: 0px 0 0px 0px;
-		width: 200px;
-		height: 200px;
-	}
-	   
-	#signbtn{
-		text-transform: uppercase;
-		border: none;
-		padding: 15px 20px  ;    
-		width: 393px;
-		color: #000000;
-		display: block;
-		background: #ee80cd73;
-		outline: none;
-		cursor: pointer;
-	}
-		
-
-	#signbtn:active{
-		opacity:0.7
-	}
- 
-	.hr{
-		height: 2px;
-		margin: 10px 0 10px 0;
-		background: #ee80cd73;
-	}
-
-	a {
-		color: inherit; 
-		text-decoration: none;
-		text-transform: uppercase;
-		font-style: inherit;
-	}
-		 
-	a:hover{
-		color: #ee1479
-	}
-		 
-	</style>
 </html>
