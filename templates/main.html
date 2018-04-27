@@ -68,7 +68,7 @@
         .then(resp => {
             var i ;
             res = resp;
-            console.log(resp);
+            console.log(resp.data);
             for (i = 0; i <= 15; i++) {
 
                 var listelement = document.createElement('li');
@@ -167,16 +167,30 @@
         document.querySelector('#listone').addEventListener('click', function(e){ // Вешаем обработчик клика на UL, не LI
         var id = e.target.id; // Получили ID, т.к. в e.target содержится элемент по которому кликнули
         document.querySelector('#test').innerHTML = id;
+        console.log(res.data.user_id);
+
+        res.data.result[id].userid = res.data.user_id;
+        console.log(res.data.result[id].userid);
         $.ajax({
             type: 'PUT',
             url: 'http://localhost:8080/api/song',
             dataType: "json",
             data: JSON.stringify(res.data.result[id]),
             contentType: 'application/json',
-            success: resp => console.log(resp),
+            
+            success: resp => console.log('ura'),
             error: err => console.log(err)
         })
-        
+       
+        var sound      = document.createElement('audio');
+        sound.id       = 'audio-player';
+        sound.controls = 'controls';
+        sound.src      = 'http://localhost:8080/api/serve/'+res.data.result[id].youtube_hash;
+        console.log(sound.src);
+        sound.type     = 'audio/mpeg';
+        sound.preload  = 'none';
+        e.target.appendChild(sound);
+       
         });
     </script>
    

@@ -2,9 +2,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_restful import reqparse, abort, Resource, fields, marshal_with
+from flask import jsonify, json
+from os import system, getcwd
 
 engine = create_engine(
-    'mysql+pymysql://kursach:Wb7Q4_Yo?86q@den1.mysql1.gear.host:3306/kursach')
+    'mysql+pymysql://user673:natala!@den1.mysql1.gear.host:3306/kursach')
 db_session = scoped_session(sessionmaker(
     autocommit=False, autoflush=False, bind=engine))
 
@@ -36,16 +38,14 @@ def find_association(user_id: int, s: Song):
 
 class SongResource(Resource):
 
-    @marshal_with(song_fields)
     def get(self):
         args = parser.parse_args()
         youtube_hash = args['youtube_hash']
         s = db_session.query(Song).filter(Song.youtube_hash == youtube_hash).first()
         if not s:
             abort(404, message='Song {} not found'.format(youtube_hash))
-        return s
+        return jsonify(s.serialize)
 
-    @marshal_with(song_fields)
     def put(self):
         args = parser.parse_args()
         user_id = args["userid"]
@@ -57,11 +57,12 @@ class SongResource(Resource):
             s = Song(youtube_hash=youtube_hash, title=title, thumbnail_url=thumbnail_url)
             db_session.add(s)
             db_session.commit()
-        if find_association(user_id, s):    
+            system('youtube-dl -o "{0}/src/{1}.%(ext)s" --extract-audio --audio-format mp3 "http://www.youtube.com/watch?v={1}"'.format(getcwd(), youtube_hash))
+        if not find_association(user_id, s):    
             a = Association(user_id = user_id, song_id = s.id)
             db_session.add(a)
             db_session.commit()
-        return s, 201
+        return jsonify(s.serialize)
 
     def delete(self):
         args = parser.parse_args()
@@ -72,16 +73,17 @@ class SongResource(Resource):
             abort(404, message="Todo {} doesn't exist".format(id))
         a = find_association(user_id,s)
         if a:
-            db_session.delete()
+            db_session.delete(a)
             db_session.commit()
         return {}, 204
 
 
 class SongListResource(Resource):
-    @marshal_with(song_fields)
     def get(self):
         args = parser.parse_args()
+        print('GET from SongList: incoming args -> {}'.format(str(args)))
         user_id = args["userid"]
         a = db_session.query(Association).filter(Association.user_id == user_id).all()
-        s = [db_session.query(Song).filter(Song.id == i.song_id).first() for i in a]
-        return s
+        s = [db_session.query(Song).filter(Song.id == i.song_id).first().serialize for i in a]
+        print('Output -> {}'.format(jsonify(result = s)))
+        return jsonify(result = s)

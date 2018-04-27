@@ -60,20 +60,23 @@ def signin():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('signin'))
 
 
-@app.route('/secret')
+@app.route('/secret', methods=['GET','POST', 'PUT'])
+@login_required
 def secret():
     return render_template('main.html')
 
 
-@app.route('/api/search/<target>')
+@app.route('/api/search/<target>', methods=['PUT', 'GET', 'POST'])
+@login_required
 def look(target):
     resp = [vid.serialize for vid in youtube_search(target)]
-    return jsonify(result = resp)
+    return jsonify({'user_id':current_user.id, 'result':resp})
 
 
 api.add_resource(SongResource, '/api/song')
@@ -83,11 +86,13 @@ api.add_resource(SongListResource, '/api/songs')
 @app.teardown_appcontext
 def shutdown_session(param):
     db_session.remove()
-    
+
 
 @app.route('/api/serve/<youtube_hash>')
+@login_required
 def serve(youtube_hash):
     return send_from_directory('src', '{}.mp3'.format(youtube_hash))
+
 
 init_db()
 app.run('localhost', 8080, debug=True)
