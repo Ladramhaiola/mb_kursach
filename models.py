@@ -93,4 +93,4 @@ class Song(Base):
         """
         Return str of class Song.
         """
-        return '<Song (title: %s, url: %s)>' % (self.title, self.thumbnail_url)
+        return '<Song (yh: %s, title: %s, url: %s)>' % (self.youtube_hash, self.title, self.thumbnail_url)

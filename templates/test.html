@@ -6,18 +6,24 @@
     <title>Document</title>
 </head>
 <body>
+    <button onclick="babah()">Babah</button>
+    <audio controls>
+        <source src="http://localhost:8080/api/serve/WzQBAc8i73E">
+    </audio>
     <script type="text/javascript">
-        let data = {"data": "Remember the Milk"}
+    function babah() {
+        let data = {"youtube_hash": "WzQBAc8i73E", "userid": 1, "title": "NEFFEX - Cold", "thumbnail_url": "urlll"}
 
         $.ajax({
             type: 'PUT',
-            url: 'http://localhost:5000/api/4',
+            url: 'http://localhost:8080/api/suka',
+            dataType: "json",
             data: JSON.stringify(data),
             contentType: 'application/json',
-            success: resp => {
-                console.log(resp)
-            }
+            success: resp => console.log(resp),
+            error: err => console.log(err)
         })
+    }
     </script>
 </body>
 </html>
